@@ -1,5 +1,4 @@
-import { Schema } from 'mongoose';
-
+import { Schema } from "mongoose";
 
 const UserSchema = new Schema(
   {
@@ -9,15 +8,14 @@ const UserSchema = new Schema(
       unique: true,
     },
     password: {
-        type: String,
-        required: true,
-        unique: true,
-      }
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
   {
     timestamps: true,
   }
 );
-
 
 export { UserSchema };
