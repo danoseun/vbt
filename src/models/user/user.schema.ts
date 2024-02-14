@@ -3,15 +3,16 @@ import { Schema } from 'mongoose';
 
 const UserSchema = new Schema(
   {
-    name: {
+    email: {
       type: String,
       required: true,
       unique: true,
     },
-    value: {
-      type: Number,
-      required: true
-    }
+    password: {
+        type: String,
+        required: true,
+        unique: true,
+      }
   },
   {
     timestamps: true,
