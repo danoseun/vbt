@@ -18,6 +18,10 @@ const variables = {
     logLevel: process.env.LOG_LEVEL || 'info',
     showAppLogs: process.env.SHOW_APPLICATION_LOGS === 'true',
     databaseLogs: process.env.SHOW_DATABASE_LOGS === 'true'
+  },
+  auth: {
+    jwtSecret: process.env.JWT_SECRET,
+    saltRound: process.env.SALT_ROUNDS
   }
 };
 

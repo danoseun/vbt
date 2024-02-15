@@ -23,7 +23,5 @@ export const handleErrors = (err: Error, req: Request, res: Response, next: Next
     return respond<string>(res, 'Validation Error', HttpStatus.BAD_REQUEST, errors);
   }
 
-  logger.error('Internal Error', err);
-
   return respond<string>(res, 'Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
 };
