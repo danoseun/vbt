@@ -22,6 +22,10 @@ const variables = {
   auth: {
     jwtSecret: process.env.JWT_SECRET,
     saltRound: process.env.SALT_ROUNDS
+  },
+  stripe: {
+    testKey: process.env.STRIPE_SECRET_KEY,
+    endPointSecret: process.env.ENDPOINT_SECRET
   }
 };
 

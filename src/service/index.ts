@@ -1,3 +1,4 @@
+import { ClientSession } from "mongodb";
 import { Model } from "mongoose";
 
 interface GenericInterface<T> {
@@ -10,8 +11,12 @@ class BaseService {
     this.model = model;
   }
 
-  create(resource: GenericInterface<any>) {
+  create(resource: GenericInterface<any>, session?: { session: ClientSession; }) {
     return this.model.create(resource);
+  }
+
+  update(id: any, updateParams: any, session?: { session: ClientSession; }) {
+    return this.model.findByIdAndUpdate(id, { $set: updateParams}, {new: true})
   }
 
   index(options = {}, page: number, perPage: number) {

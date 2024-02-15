@@ -8,7 +8,8 @@ const request = supertest(app);
 
 describe('User', () => {
   let signupResponse: Response;
-  let token: string;
+  let tokenOne: string; 
+  let tokenTwo: string;
 
   afterAll(async () => {
     await UserModel.deleteMany();
@@ -73,6 +74,19 @@ describe('User', () => {
     expect(signupResponse.body.data).toHaveProperty('password');
   });
 
+  it('Should create another user when payload is valid', async () => {
+    signupResponse = await request.post('/v1/signup').send({
+      email: 'vzybee@ymail.com',
+      password: 'Qwertuiy54@#',
+      name: 'rasheed dipo'
+    });
+
+    expect(signupResponse.status).toBe(HttpStatus.CREATED);
+    expect(signupResponse.body.data).toHaveProperty('_id');
+    expect(signupResponse.body.data).toHaveProperty('email');
+    expect(signupResponse.body.data).toHaveProperty('password');
+  });
+
   it('Should not create partner when email is already existing', async () => {
     const response = await request.post('/v1/signup').send({
       email: 'koriko@ymail.com',
@@ -118,11 +132,54 @@ describe('User', () => {
       password: 'Qwertuiy76@#'
     });
     
-    token = response.body.data.token;
+    tokenOne = response.body.data.token;
+    console.log('tokenOne', tokenOne);
 
     expect(response.status).toBe(HttpStatus.OK);
     expect(response.body.status).toBe('success');
     expect(response.body.data.existingUser.email).toStrictEqual('koriko@ymail.com');
     expect(response.body.data.token).toBeDefined();
+  });
+
+  it('Should login another partner when email and password are valid', async () => {
+    const response = await request.post('/v1/login').send({
+        email: 'vzybee@ymail.com',
+        password: 'Qwertuiy54@#',
+    });
+    
+    tokenTwo = response.body.data.token;
+    console.log('tokenTwo', tokenTwo);
+
+    expect(response.status).toBe(HttpStatus.OK);
+    expect(response.body.status).toBe('success');
+    expect(response.body.data.existingUser.email).toStrictEqual('vzybee@ymail.com');
+    expect(response.body.data.token).toBeDefined();
+  });
+
+  it('Should update user records', async () => {
+    const email = 'koriko@ymail.com';
+    const response = await request
+            .patch(`/v1/users/${email}`)
+            .set('Content-Type', 'application/json')
+            .set('authorization', `Bearer ${tokenOne}`)
+            .set('Content-Type', 'application/json')
+            .send({name: 'new name'});
+
+    console.log('update', response.body);
+    expect(response.body.status).toBe('success');
+  });
+
+  it('Should not update user records', async () => {
+    const email = 'vzybee@ymail.com';
+    const response = await request
+            .patch(`/v1/users/${email}`)
+            .set('Content-Type', 'application/json')
+            .set('authorization', `Bearer ${tokenOne}`)
+            .set('Content-Type', 'application/json')
+            .send({name: 'new name'});
+
+    
+    expect(response.body.status).toBe('error');
+    expect(response.body.message).toStrictEqual("Can't edit another user's record")
   });
 });

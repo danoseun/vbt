@@ -1,4 +1,5 @@
 import { celebrate, Joi, Segments } from 'celebrate';
+import { TransactionStatus } from '../interfaces';
 
 export const createUserSchema = celebrate(
   {
@@ -39,6 +40,30 @@ export const loginUserSchema = celebrate(
       password: Joi.string().required().trim().messages({
         'string.empty': `{{#label}} is not allowed to be empty`
       })
+    })
+  },
+  {
+    abortEarly: false
+  }
+);
+
+export const updateUserSchema = celebrate(
+  {
+    [Segments.PARAMS]: Joi.object().keys({
+      email: Joi.string().required().trim().messages({
+        'string.empty': `{{#label}} is not allowed to be empty`
+      })
+    })
+  },
+  {
+    abortEarly: false
+  }
+);
+
+export const createTransactionSchema = celebrate(
+  {
+    [Segments.BODY]: Joi.object().keys({
+      status: Joi.string().valid(TransactionStatus.PENDING, TransactionStatus.PAID)
     })
   },
   {

@@ -21,16 +21,14 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
     const decoded = JWT.decode(token);
 
-    const user = await userService.show("id", decoded.id);
+    const user = await userService.show("email", decoded.email);
 
     if (!user) {
       return next(new NotAuthenticatedError('Invalid token'));
     }
 
-
+    delete user.password;
     res.locals.user = user;
-
-    console.log('locals', res.locals.user);
 
     return next();
   } catch (error) {

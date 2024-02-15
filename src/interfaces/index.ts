@@ -8,3 +8,8 @@ export interface LoginResponse {
   existingUser: User;
   token: string;
 }
+
+export enum TransactionStatus {
+  PENDING = 'pending',
+  PAID = 'paid'
+}
