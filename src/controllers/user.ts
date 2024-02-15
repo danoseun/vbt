@@ -15,9 +15,6 @@ import {
 import variables from "../variables";
 import mongoose from "mongoose";
 
-export interface CustomRequest extends Request {
-  rawBody: object;
-}
 
 const stripe = new Stripe(variables.stripe.testKey);
 
@@ -128,9 +125,8 @@ export const userController = {
     }
   },
 
-  async handleWebhook(req: CustomRequest, res: Response, next: NextFunction) {
+  async handleWebhook(req: Request, res: Response, next: NextFunction) {
     res.status(200).json({ received: true })
-    const rawBody = req.rawBody as any;
     const session = await mongoose.startSession();
     const sig = req.headers["stripe-signature"];
     let event;
@@ -139,7 +135,7 @@ export const userController = {
       await session.withTransaction(async () => {
         // Handle the event
         event = stripe.webhooks.constructEvent(
-          rawBody,
+          req.body,
           sig,
           variables.stripe.endPointSecret
         );
