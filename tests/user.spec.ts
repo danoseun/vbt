@@ -133,7 +133,6 @@ describe('User', () => {
     });
     
     tokenOne = response.body.data.token;
-    console.log('tokenOne', tokenOne);
 
     expect(response.status).toBe(HttpStatus.OK);
     expect(response.body.status).toBe('success');
@@ -146,9 +145,7 @@ describe('User', () => {
         email: 'vzybee@ymail.com',
         password: 'Qwertuiy54@#',
     });
-    
-    tokenTwo = response.body.data.token;
-    console.log('tokenTwo', tokenTwo);
+  
 
     expect(response.status).toBe(HttpStatus.OK);
     expect(response.body.status).toBe('success');
@@ -163,9 +160,8 @@ describe('User', () => {
             .set('Content-Type', 'application/json')
             .set('authorization', `Bearer ${tokenOne}`)
             .set('Content-Type', 'application/json')
-            .send({name: 'new name'});
+            .send({'name': 'Openda Moses'});
 
-    console.log('update', response.body);
     expect(response.body.status).toBe('success');
   });
 

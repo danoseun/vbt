@@ -16,7 +16,7 @@ class BaseService {
   }
 
   update(id: any, updateParams: any, session?: { session: ClientSession; }) {
-    return this.model.findByIdAndUpdate(id, { $set: updateParams}, {new: true})
+    return this.model.findOneAndUpdate(id, updateParams, { new: true })
   }
 
   index(options = {}, page: number, perPage: number) {

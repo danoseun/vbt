@@ -82,10 +82,8 @@ export const userController = {
         req.body.name
       );
       delete updatedUserRecord.password;
-      console.log("UPDATE", updatedUserRecord);
       return respond<User>(res, updatedUserRecord, HttpStatus.OK);
     } catch (error) {
-      console.log("error", error);
       next(error);
     }
   },

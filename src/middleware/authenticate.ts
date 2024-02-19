@@ -21,12 +21,12 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
     const decoded = JWT.decode(token);
 
-    const user = await userService.show("email", decoded.email);
+    let user = await userService.show("email", decoded.email);
 
     if (!user) {
       return next(new NotAuthenticatedError('Invalid token'));
     }
-
+    user = user.toObject();
     delete user.password;
     res.locals.user = user;
 
